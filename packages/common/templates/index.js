@@ -6,8 +6,9 @@ import reactTs from './react-ts';
 import preact from './preact';
 import svelte from './svelte';
 import parcel from './parcel';
+import gatsby from './gatsby';
 
-export { angular, vue, react, reactTs, preact, svelte, parcel };
+export { angular, vue, react, reactTs, preact, svelte, parcel, gatsby };
 
 export default function getDefinition(
   theme:
@@ -18,6 +19,7 @@ export default function getDefinition(
     | 'create-react-app-typescript'
     | 'angular-cli'
     | 'parcel'
+    | 'gatsby-cli'
 ) {
   switch (theme) {
     case react.name:
@@ -34,6 +36,8 @@ export default function getDefinition(
       return angular;
     case parcel.name:
       return parcel;
+    case gatsby.name:
+      return gatsby;
     default:
       return react;
   }
