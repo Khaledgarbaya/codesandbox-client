@@ -3,7 +3,14 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
 import type { Sandbox, Module, Directory } from 'common/types';
-import { react, reactTs, vue, preact, svelte } from 'common/templates/index';
+import {
+  react,
+  reactTs,
+  vue,
+  preact,
+  svelte,
+  gatsby,
+} from 'common/templates/index';
 import { resolveModule } from 'common/sandbox/modules';
 
 const CSSTag = (resource: string) =>
@@ -168,6 +175,10 @@ export async function createZip(
     );
   } else if (sandbox.template === preact.name) {
     promise = import(/* webpackChunkName: 'preact-zip' */ './preact-cli').then(
+      generator => generator.default(zip, sandbox, modules, directories)
+    );
+  } else if (sandbox.template === gatsby.name) {
+    promise = import(/* webpackChunkName: 'gatsby-zip' */ './gatsby-cli').then(
       generator => generator.default(zip, sandbox, modules, directories)
     );
   } else if (sandbox.template === svelte.name) {

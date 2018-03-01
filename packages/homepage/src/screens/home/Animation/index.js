@@ -12,6 +12,7 @@ import {
   react,
   reactTs,
   preact,
+  gatsby,
   svelte,
   parcel,
 } from 'common/templates';
@@ -64,7 +65,16 @@ const Message = styled.div`
 `};
 `;
 
-const TEMPLATES = [parcel, react, vue, angular, preact, reactTs, svelte];
+const TEMPLATES = [
+  parcel,
+  react,
+  vue,
+  angular,
+  preact,
+  gatsby,
+  reactTs,
+  svelte,
+];
 
 export default class Animation extends React.PureComponent {
   state = {

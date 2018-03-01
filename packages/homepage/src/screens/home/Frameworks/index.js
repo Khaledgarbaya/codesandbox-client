@@ -228,6 +228,11 @@ const TEMPLATE_SUPPORT = {
     css: ['Global', 'Modules'],
     description: 'Used for Preact projects, based on: ',
   },
+  'gatsby-cli': {
+    loaders: [],
+    css: ['Global', 'Modules'],
+    description: 'Used for Gatsby projects, based on: ',
+  },
   svelte: {
     loaders: [js, html, image],
     css: ['Global', 'Scoped', 'Modules'],

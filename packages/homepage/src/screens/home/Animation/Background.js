@@ -30,6 +30,7 @@ export default class Background extends React.PureComponent {
     'create-react-app': '#1E2428',
     'vue-cli': '#1D2525',
     'preact-cli': '#202328',
+    'gatsby-cli': '#2023428',
     svelte: '#202022',
   };
 
