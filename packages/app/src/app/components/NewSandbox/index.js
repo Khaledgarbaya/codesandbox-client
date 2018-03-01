@@ -11,11 +11,13 @@ import {
   newVueSandboxUrl,
   newAngularSandboxUrl,
   newSvelteSandboxUrl,
+  newGatsbySandboxUrl,
   importFromGitHubUrl,
   uploadFromCliUrl,
 } from 'common/utils/url-generator';
 
 import ReactIcon from 'common/components/logos/React';
+import GatsbyIcon from 'common/components/logos/Gatsby';
 import PreactIcon from 'common/components/logos/Preact';
 import ParcelIcon from 'common/components/logos/Parcel';
 import VueIcon from 'common/components/logos/Vue';
@@ -86,6 +88,14 @@ function NewSandbox({ signals }) {
           height={50}
           text="Preact"
           href={newPreactSandboxUrl()}
+          onClick={() => signals.closeModal()}
+        />
+        <Logo
+          Icon={GatsbyIcon}
+          width={50}
+          height={50}
+          text="Gatsby"
+          href={newGatsbySandboxUrl()}
           onClick={() => signals.closeModal()}
         />
         <Logo
