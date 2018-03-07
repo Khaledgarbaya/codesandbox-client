@@ -194,7 +194,7 @@ export default class Manager {
     debug(`Loaded manifest.`);
   }
 
-  evaluateModule(module: Module) {
+  evaluateModule(module: Module, force: boolean = false) {
     if (this.hardReload) {
       // Do a hard reload
       document.location.reload();
@@ -209,6 +209,10 @@ export default class Manager {
       .forEach(t => t.evaluate(this));
 
     const transpiledModule = this.getTranspiledModule(module);
+
+    if (force && transpiledModule.compilation) {
+      transpiledModule.compilation = null;
+    }
 
     try {
       const exports = this.evaluateTranspiledModule(transpiledModule);
@@ -487,16 +491,14 @@ export default class Manager {
     }
   }
 
-  async downloadDependency(
+  downloadDependency(
     path: string,
-    currentPath: string
+    currentPath: string,
+    ignoredExtensions: Array<string> = this.preset.ignoredExtensions
   ): Promise<TranspiledModule> {
-    return fetchModule(
-      path,
-      currentPath,
-      this,
-      this.preset.ignoredExtensions
-    ).then(module => this.getTranspiledModule(module));
+    return fetchModule(path, currentPath, this, ignoredExtensions).then(
+      module => this.getTranspiledModule(module)
+    );
   }
 
   updateModule(m: Module) {
@@ -508,15 +510,18 @@ export default class Manager {
     });
   }
 
-  resolveTranspiledModuleAsync = async (
+  resolveTranspiledModuleAsync = (
     path: string,
-    currentPath: string
+    currentPath: string,
+    ignoredExtensions?: Array<string>
   ): Promise<TranspiledModule> => {
     try {
-      return this.resolveTranspiledModule(path, currentPath);
+      return Promise.resolve(
+        this.resolveTranspiledModule(path, currentPath, ignoredExtensions)
+      );
     } catch (e) {
       if (e.type === 'module-not-found' && e.isDependency) {
-        return this.downloadDependency(e.path, currentPath);
+        return this.downloadDependency(e.path, currentPath, ignoredExtensions);
       }
 
       throw e;
@@ -529,7 +534,11 @@ export default class Manager {
    * @param {*} path
    * @param {*} currentPath
    */
-  resolveTranspiledModule(path: string, currentPath: string): TranspiledModule {
+  resolveTranspiledModule(
+    path: string,
+    currentPath: string,
+    ignoredExtensions?: Array<string>
+  ): TranspiledModule {
     if (path.startsWith('webpack:')) {
       throw new Error('Cannot resolve webpack path');
     }
@@ -545,7 +554,7 @@ export default class Manager {
     const module = this.resolveModule(
       newPath,
       currentPath,
-      this.preset.ignoredExtensions
+      ignoredExtensions || this.preset.ignoredExtensions
     );
 
     return this.getTranspiledModule(module, queryPath.join('!'));
